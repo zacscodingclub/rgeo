@@ -114,27 +114,6 @@ task :clean do
 end
 
 
-# RDoc tasks
-
-task :build_rdoc => "#{doc_directory_}/index.html"
-all_rdoc_files_ = ::Dir.glob("lib/**/*.rb") + gemspec_.extra_rdoc_files
-main_rdoc_file_ = ::RAKEFILE_CONFIG[:main_rdoc_file]
-main_rdoc_file_ = 'README.rdoc' if !main_rdoc_file_ && ::File.readable?('README.rdoc')
-main_rdoc_file_ = ::Dir.glob("*.rdoc").first unless main_rdoc_file_
-file "#{doc_directory_}/index.html" => all_rdoc_files_ do
-  rm_r doc_directory_ rescue nil
-  args_ = []
-  args_ << '-o' << doc_directory_
-  args_ << '--main' << main_rdoc_file_ if main_rdoc_file_
-  args_ << '--title' << "#{::RAKEFILE_CONFIG[:product_visible_name] || gemspec_.name.capitalize} #{release_gemspec_.version} Documentation"
-  args_ << '-f' << 'darkfish'
-  args_ << '--verbose' if ::ENV['VERBOSE']
-  gem 'rdoc'
-  require 'rdoc/rdoc'
-  ::RDoc::RDoc.new.document(args_ + all_rdoc_files_)
-end
-
-
 # Gem release tasks
 
 task :build_other

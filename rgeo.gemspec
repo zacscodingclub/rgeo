@@ -19,16 +19,13 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir.glob("lib/**/*.rb") +
     Dir.glob("ext/**/*.{rb,c,h}") +
-    Dir.glob("test/**/*.rb") +
-    Dir.glob("*.rdoc")
+    Dir.glob("test/**/*.rb")
 
-  spec.extra_rdoc_files = Dir.glob("*.rdoc")
   spec.test_files = Dir.glob("test/**/tc_*.rb")
   spec.platform = Gem::Platform::RUBY
   spec.extensions = Dir.glob("ext/*/extconf.rb")
 
   spec.add_development_dependency "rake", "~> 10.4"
-  spec.add_development_dependency "rdoc", "~> 4.2"
   spec.add_development_dependency "ffi-geos", "~> 1.0"
   spec.add_development_dependency "test-unit", "~> 3.0"
 end
