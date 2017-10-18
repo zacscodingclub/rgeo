@@ -13,21 +13,21 @@ module RGeo
     class Factory
       include Feature::Factory::Instance
 
-      def initialize(impl_prefix_, opts_ = {}) # :nodoc:
-        @impl_prefix = impl_prefix_
-        @point_class = Geographic.const_get("#{impl_prefix_}PointImpl")
-        @line_string_class = Geographic.const_get("#{impl_prefix_}LineStringImpl")
-        @linear_ring_class = Geographic.const_get("#{impl_prefix_}LinearRingImpl")
-        @line_class = Geographic.const_get("#{impl_prefix_}LineImpl")
-        @polygon_class = Geographic.const_get("#{impl_prefix_}PolygonImpl")
-        @geometry_collection_class = Geographic.const_get("#{impl_prefix_}GeometryCollectionImpl")
-        @multi_point_class = Geographic.const_get("#{impl_prefix_}MultiPointImpl")
-        @multi_line_string_class = Geographic.const_get("#{impl_prefix_}MultiLineStringImpl")
-        @multi_polygon_class = Geographic.const_get("#{impl_prefix_}MultiPolygonImpl")
-        @support_z = opts_[:has_z_coordinate] ? true : false
-        @support_m = opts_[:has_m_coordinate] ? true : false
-        @srid = (opts_[:srid] || 4326).to_i
-        @proj4 = opts_[:proj4]
+      def initialize(impl_prefix, opts = {}) # :nodoc:
+        @impl_prefix = impl_prefix
+        @point_class = Geographic.const_get("#{impl_prefix}PointImpl")
+        @line_string_class = Geographic.const_get("#{impl_prefix}LineStringImpl")
+        @linear_ring_class = Geographic.const_get("#{impl_prefix}LinearRingImpl")
+        @line_class = Geographic.const_get("#{impl_prefix}LineImpl")
+        @polygon_class = Geographic.const_get("#{impl_prefix}PolygonImpl")
+        @geometry_collection_class = Geographic.const_get("#{impl_prefix}GeometryCollectionImpl")
+        @multi_point_class = Geographic.const_get("#{impl_prefix}MultiPointImpl")
+        @multi_line_string_class = Geographic.const_get("#{impl_prefix}MultiLineStringImpl")
+        @multi_polygon_class = Geographic.const_get("#{impl_prefix}MultiPolygonImpl")
+        @support_z = opts[:has_z_coordinate] ? true : false
+        @support_m = opts[:has_m_coordinate] ? true : false
+        @srid = (opts[:srid] || 4326).to_i
+        @proj4 = opts[:proj4]
         if CoordSys::Proj4.supported?
           if @proj4.is_a?(::String) || @proj4.is_a?(::Hash)
             @proj4 = CoordSys::Proj4.create(@proj4)
@@ -35,7 +35,7 @@ module RGeo
         else
           @proj4 = nil
         end
-        @coord_sys = opts_[:coord_sys]
+        @coord_sys = opts[:coord_sys]
         if @coord_sys.is_a?(::String)
           @coord_sys = begin
                          CoordSys::CS.create_from_wkt(@coord_sys)
@@ -43,43 +43,43 @@ module RGeo
                          nil
                        end
         end
-        @lenient_assertions = opts_[:uses_lenient_assertions] ? true : false
-        @buffer_resolution = opts_[:buffer_resolution].to_i
+        @lenient_assertions = opts[:uses_lenient_assertions] ? true : false
+        @buffer_resolution = opts[:buffer_resolution].to_i
         @buffer_resolution = 1 if @buffer_resolution < 1
 
-        wkt_generator_ = opts_[:wkt_generator]
-        case wkt_generator_
+        wkt_generator = opts[:wkt_generator]
+        case wkt_generator
         when ::Hash
-          @wkt_generator = WKRep::WKTGenerator.new(wkt_generator_)
+          @wkt_generator = WKRep::WKTGenerator.new(wkt_generator)
         else
           @wkt_generator = WKRep::WKTGenerator.new(convert_case: :upper)
         end
-        wkb_generator_ = opts_[:wkb_generator]
-        case wkb_generator_
+        wkb_generator = opts[:wkb_generator]
+        case wkb_generator
         when ::Hash
-          @wkb_generator = WKRep::WKBGenerator.new(wkb_generator_)
+          @wkb_generator = WKRep::WKBGenerator.new(wkb_generator)
         else
           @wkb_generator = WKRep::WKBGenerator.new
         end
-        wkt_parser_ = opts_[:wkt_parser]
-        case wkt_parser_
+        wkt_parser = opts[:wkt_parser]
+        case wkt_parser
         when ::Hash
-          @wkt_parser = WKRep::WKTParser.new(self, wkt_parser_)
+          @wkt_parser = WKRep::WKTParser.new(self, wkt_parser)
         else
           @wkt_parser = WKRep::WKTParser.new(self)
         end
-        wkb_parser_ = opts_[:wkb_parser]
-        case wkb_parser_
+        wkb_parser = opts[:wkb_parser]
+        case wkb_parser
         when ::Hash
-          @wkb_parser = WKRep::WKBParser.new(self, wkb_parser_)
+          @wkb_parser = WKRep::WKBParser.new(self, wkb_parser)
         else
           @wkb_parser = WKRep::WKBParser.new(self)
         end
         @projector = nil
       end
 
-      def _set_projector(projector_) # :nodoc:
-        @projector = projector_
+      def _set_projector(projector) # :nodoc:
+        @projector = projector
       end
 
       # Equivalence test.
@@ -251,12 +251,12 @@ module RGeo
       # Raises Error::InvalidGeometry if the given geometry is not of
       # this factory.
 
-      def project(geometry_)
-        return nil unless @projector && geometry_
-        unless geometry_.factory == self
+      def project(geometry)
+        return nil unless @projector && geometry
+        unless geometry.factory == self
           raise Error::InvalidGeometry, "Wrong geometry type"
         end
-        @projector.project(geometry_)
+        @projector.project(geometry)
       end
 
       # Reverse-projects the given geometry from the projected coordinate

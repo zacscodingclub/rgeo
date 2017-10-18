@@ -114,7 +114,7 @@ module RGeo
           end
         end
         array = []
-        hash.each do |_hval_, data|
+        hash.each do |_hval, data|
           array << data[0] if data[1].odd?
         end
         factory.multi_point([array])
@@ -128,7 +128,7 @@ module RGeo
     module BasicMultiPointMethods # :nodoc:
       def initialize(factory, elements)
         _set_factory(factory)
-        @elements = elements.map do |elem_|
+        @elements = elements.map do |elem|
           elem = Feature.cast(elem, factory, Feature::Point, :keep_subtype)
           raise Error::InvalidGeometry, "Could not cast #{elem}" unless elem
           elem
@@ -152,7 +152,7 @@ module RGeo
     module BasicMultiPolygonMethods # :nodoc:
       def initialize(factory, elements)
         _set_factory(factory)
-        @elements = elements.map do |elem_|
+        @elements = elements.map do |elem|
           elem = Feature.cast(elem, factory, Feature::Polygon, :keep_subtype)
           raise Error::InvalidGeometry, "Could not cast #{elem}" unless elem
           elem

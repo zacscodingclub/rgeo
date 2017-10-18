@@ -5,7 +5,7 @@
 # -----------------------------------------------------------------------------
 
 require "rgeo"
-require 'pry'
+
 module RGeo
   module Tests # :nodoc:
     module Common # :nodoc:
@@ -27,9 +27,6 @@ module RGeo
           geom1 = @factory.point(-10, 20)
           geom2 = @factory.point(-20, 25)
           geom3 = geom1.union(geom2)
-          if geom3.nil?
-            binding.pry
-          end
           assert_equal(_srid, geom3.srid)
           assert_equal(_srid, geom3.geometry_n(0).srid)
           assert_equal(_srid, geom3.geometry_n(1).srid)
