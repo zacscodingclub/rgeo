@@ -24,11 +24,11 @@ module RGeo
       # RGeo::Cartesian.simple_factory for details. Unsupported options
       # are ignored.
 
-      def preferred_factory(opts_ = {})
+      def preferred_factory(opts = {})
         if ::RGeo::Geos.supported?
-          ::RGeo::Geos.factory(opts_)
+          ::RGeo::Geos.factory(opts)
         else
-          simple_factory(opts_)
+          simple_factory(opts)
         end
       end
       alias_method :factory, :preferred_factory
@@ -102,8 +102,8 @@ module RGeo
       #   Default is the empty hash, indicating the default configuration
       #   for WKRep::WKBGenerator.
 
-      def simple_factory(opts_ = {})
-        Cartesian::Factory.new(opts_)
+      def simple_factory(opts = {})
+        Cartesian::Factory.new(opts)
       end
 
       # Returns a Feature::FactoryGenerator that creates preferred
