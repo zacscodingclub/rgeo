@@ -136,8 +136,8 @@ module RGeo
           raise Error::ParseError, "Bad endian byte value: #{endian_value}"
         end
         type_code = _get_integer(little_endian)
-        has_z_ = false
-        has_m_ = false
+        has_z = false
+        has_m = false
         srid = contained ? nil : @default_srid
         if @support_ewkb
           has_z ||= type_code & 0x80000000 != 0
