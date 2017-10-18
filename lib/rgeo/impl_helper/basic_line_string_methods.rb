@@ -98,14 +98,14 @@ module RGeo
     end
 
     module BasicLineMethods # :nodoc:
-      def initialize(factory, start, end)
+      def initialize(factory, start_line, end_line)
         _set_factory(factory)
-        cstart = Feature.cast(start, factory, Feature::Point)
+        cstart = Feature.cast(start_line, factory, Feature::Point)
         unless cstart
-          raise Error::InvalidGeometry, "Could not cast start: #{start}"
+          raise Error::InvalidGeometry, "Could not cast start: #{start_line}"
         end
-        cend = Feature.cast(end, factory, Feature::Point)
-        raise Error::InvalidGeometry, "Could not cast end: #{end}" unless cend
+        cend = Feature.cast(end_line, factory, Feature::Point)
+        raise Error::InvalidGeometry, "Could not cast end: #{end_line}" unless cend
         @points = [cstart, cend]
         _validate_geometry
       end

@@ -125,19 +125,19 @@ module RGeo
             tag << " M"
           end
         end
-        if type_ == Feature::Point
+        if type == Feature::Point
           "#{tag} #{_generate_point(obj)}"
-        elsif type_ == Feature::LineString
+        elsif type == Feature::LineString
           "#{tag} #{_generate_line_string(obj)}"
-        elsif type_ == Feature::Polygon
+        elsif type == Feature::Polygon
           "#{tag} #{_generate_polygon(obj)}"
-        elsif type_ == Feature::GeometryCollection
+        elsif type == Feature::GeometryCollection
           "#{tag} #{_generate_geometry_collection(obj)}"
-        elsif type_ == Feature::MultiPoint
+        elsif type == Feature::MultiPoint
           "#{tag} #{_generate_multi_point(obj)}"
-        elsif type_ == Feature::MultiLineString
+        elsif type == Feature::MultiLineString
           "#{tag} #{_generate_multi_line_string(obj)}"
-        elsif type_ == Feature::MultiPolygon
+        elsif type == Feature::MultiPolygon
           "#{tag} #{_generate_multi_polygon(obj)}"
         else
           raise Error::ParseError, "Unrecognized geometry type: #{type}"

@@ -220,10 +220,10 @@ module RGeo
         _expect_token_type(::Numeric)
         y = @cur_token
         _next_token
-        extra_ = []
+        extra = []
         if @cur_expect_z.nil?
           while ::Numeric === @cur_token
-            extra_ << @cur_token
+            extra << @cur_token
             _next_token
           end
           num_extras = extra.size
@@ -236,20 +236,20 @@ module RGeo
           end
           _ensure_factory
         else
-          val_ = 0
+          val = 0
           if @cur_expect_z
             _expect_token_type(::Numeric)
-            val_ = @cur_token
+            val = @cur_token
             _next_token
           end
-          extra << val_ if @cur_factory_support_z
-          val_ = 0
+          extra << val if @cur_factory_support_z
+          val = 0
           if @cur_expect_m
             _expect_token_type(::Numeric)
-            val_ = @cur_token
+            val = @cur_token
             _next_token
           end
-          extra << val_ if @cur_factory_support_m
+          extra << val if @cur_factory_support_m
         end
         @cur_factory.point(x, y, *extra)
       end
@@ -284,7 +284,7 @@ module RGeo
       end
 
       def _parse_polygon # :nodoc:
-        inner_rings_ = []
+        inner_rings = []
         if @cur_token == "empty"
           outer_ring = _ensure_factory.linear_ring([])
         else
@@ -295,7 +295,7 @@ module RGeo
             break if @cur_token == :end
             _expect_token_type(:comma)
             _next_token
-            inner_rings_ << _parse_line_string
+            inner_rings << _parse_line_string
           end
         end
         _next_token
@@ -390,7 +390,7 @@ module RGeo
 
       def _next_token # :nodoc:
         if @_scanner.scan_until(/\(|\)|\[|\]|,|[^\s\(\)\[\],]+/)
-          token_ = @_scanner.matched
+          token = @_scanner.matched
           case token
           when /^[-+]?(\d+(\.\d*)?|\.\d+)(e[-+]?\d+)?$/
             @cur_token = token.to_f

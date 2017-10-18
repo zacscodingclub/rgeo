@@ -32,7 +32,7 @@ module RGeo
       end
 
       def interior_ring_n(n)
-        n_ < 0 ? nil : @interior_rings[n]
+        n < 0 ? nil : @interior_rings[n]
       end
 
       def interior_rings
