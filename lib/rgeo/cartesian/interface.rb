@@ -114,8 +114,8 @@ module RGeo
       # an SRID and it will automatically fetch the appropriate Proj4
       # and CoordSys objects.
 
-      def preferred_factory_generator(defaults_ = {})
-        ::Proc.new { |c_| preferred_factory(defaults_.merge(c_)) }
+      def preferred_factory_generator(defaults = {})
+        ::Proc.new { |c| preferred_factory(defaults.merge(c)) }
       end
       alias_method :factory_generator, :preferred_factory_generator
 
@@ -127,8 +127,8 @@ module RGeo
       # an SRID and it will automatically fetch the appropriate Proj4
       # and CoordSys objects.
 
-      def simple_factory_generator(defaults_ = {})
-        ::Proc.new { |c_| simple_factory(defaults_.merge(c_)) }
+      def simple_factory_generator(defaults = {})
+        ::Proc.new { |c| simple_factory(defaults.merge(c)) }
       end
     end
   end
