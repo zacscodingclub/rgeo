@@ -42,23 +42,23 @@ module RGeo
         #   entries. The authority code will be set to the identifier. If
         #   not set, then the authority fields of entries will be blank.
 
-        def initialize(filename_, opts_ = {})
-          dir_ = nil
-          if opts_.include?(:dir)
-            dir_ = opts_[:dir]
+        def initialize(filename, opts = {})
+          dir = nil
+          if opts.include?(:dir)
+            dir = opts[:dir]
           else
-            ["/usr/local/share/proj", "/usr/local/proj/share/proj", "/usr/local/proj4/share/proj", "/opt/local/share/proj", "/opt/proj/share/proj", "/opt/proj4/share/proj", "/opt/share/proj", "/usr/share/proj"].each do |d_|
-              if ::File.directory?(d_) && ::File.readable?(d_)
-                dir_ = d_
+            ["/usr/local/share/proj", "/usr/local/proj/share/proj", "/usr/local/proj4/share/proj", "/opt/local/share/proj", "/opt/proj/share/proj", "/opt/proj4/share/proj", "/opt/share/proj", "/usr/share/proj"].each do |d|
+              if ::File.directory?(d) && ::File.readable?(d)
+                dir = d
                 break
               end
             end
           end
-          @path = dir_ ? "#{dir_}/#{filename_}" : filename_
-          @authority = opts_[:authority]
-          if opts_[:cache]
+          @path = dir ? "#{dir}/#{filename}" : filename
+          @authority = opts[:authority]
+          if opts[:cache]
             @cache = {}
-            case opts_[:cache]
+            case opts[:cache]
             when :read_all
               @populate_state = 1
             when :preload
@@ -75,20 +75,20 @@ module RGeo
 
         # Retrieve the Entry for the given ID number.
 
-        def get(ident_)
-          ident_ = ident_.to_s
-          return @cache[ident_] if @cache && @cache.include?(ident_)
-          result_ = nil
+        def get(ident)
+          ident = ident.to_s
+          return @cache[ident] if @cache && @cache.include?(ident)
+          result = nil
           if @populate_state == 0
-            data_ = _search_file(ident_)
-            result_ = Entry.new(ident_, authority: @authority, authority_code: @authority ? ident_ : nil, name: data_[1], proj4: data_[2]) if data_
-            @cache[ident_] = result_ if @cache
+            data = _search_file(ident)
+            result = Entry.new(ident, authority: @authority, authority_code: @authority ? ident : nil, name: data[1], proj4: data[2]) if data
+            @cache[ident] = result if @cache
           elsif @populate_state == 1
             _search_file(nil)
-            result_ = @cache[ident_]
+            result = @cache[ident]
             @populate_state = 2
           end
-          result_
+          result
         end
 
         # Clear the cache if one exists.
@@ -98,37 +98,37 @@ module RGeo
           @populate_state = 1 if @populate_state == 2
         end
 
-        def _search_file(ident_) # :nodoc:
-          ::File.open(@path) do |file_|
-            cur_name_ = nil
-            cur_ident_ = nil
-            cur_text_ = nil
-            file_.each do |line_|
-              line_.strip!
-              if (comment_delim_ = line_.index('#'))
-                cur_name_ = line_[comment_delim_ + 1..-1].strip
-                line_ = line_[0..comment_delim_ - 1].strip
+        def _search_file(ident) # :nodoc:
+          ::File.open(@path) do |file|
+            cur_name = nil
+            cur_ident = nil
+            cur_text = nil
+            file.each do |line|
+              line.strip!
+              if (comment_delim = line.index('#'))
+                cur_name = line[comment_delim + 1..-1].strip
+                line = line[0..comment_delim - 1].strip
               end
-              unless cur_ident_
-                if line_ =~ /^<(\w+)>(.*)/
-                  cur_ident_ = Regexp.last_match(1)
-                  cur_text_ = []
-                  line_ = Regexp.last_match(2).strip
+              unless cur_ident
+                if line =~ /^<(\w+)>(.*)/
+                  cur_ident = Regexp.last_match(1)
+                  cur_text = []
+                  line = Regexp.last_match(2).strip
                 end
               end
-              next unless cur_ident_
-              if line_[-2..-1] == "<>"
-                cur_text_ << line_[0..-3].strip
-                cur_text_ = cur_text_.join(" ")
-                if ident_.nil?
-                  @cache[ident_] = Entry.new(ident_, authority: @authority, authority_code: @authority ? id_ : nil, name: cur_name_, proj4: cur_text_)
+              next unless cur_ident
+              if line[-2..-1] == "<>"
+                cur_text << line[0..-3].strip
+                cur_text = cur_text.join(" ")
+                if ident.nil?
+                  @cache[ident] = Entry.new(ident, authority: @authority, authority_code: @authority ? id : nil, name: cur_name, proj4: cur_text)
                 end
-                return [ident_, cur_name_, cur_text_] if cur_ident_ == ident_
-                cur_ident_ = nil
-                cur_name_ = nil
-                cur_text_ = nil
+                return [ident, cur_name, cur_text] if cur_ident == ident
+                cur_ident = nil
+                cur_name = nil
+                cur_text = nil
               else
-                cur_text_ << line_
+                cur_text << line
               end
             end
           end
