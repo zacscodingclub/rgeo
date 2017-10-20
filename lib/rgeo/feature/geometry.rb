@@ -566,12 +566,12 @@ module RGeo
       # representational equivalence test, this method must fall back on
       # objective equivalence.
 
-      def eql?(rhs_)
-        if rhs_.is_a?(::RGeo::Feature::Instance)
+      def eql?(rhs)
+        if rhs.is_a?(::RGeo::Feature::Instance)
           begin
-            rep_equals?(rhs_)
+            rep_equals?(rhs)
           rescue Error::UnsupportedOperation
-            equal?(rhs_)
+            equal?(rhs)
           end
         else
           false
@@ -592,12 +592,12 @@ module RGeo
       # test, the == operator must fall back on representational or
       # objective equivalence.
 
-      def ==(rhs_)
-        if rhs_.is_a?(::RGeo::Feature::Instance)
+      def ==(rhs)
+        if rhs.is_a?(::RGeo::Feature::Instance)
           begin
-            equals?(rhs_)
+            equals?(rhs)
           rescue Error::UnsupportedOperation
-            eql?(rhs_)
+            eql?(rhs)
           end
         else
           false
@@ -609,8 +609,8 @@ module RGeo
       # types is not specified; an implementation may choose to provide
       # additional capabilities as appropriate.
 
-      def -(rhs_)
-        difference(rhs_)
+      def -(rhs)
+        difference(rhs)
       end
 
       # If the given rhs is a geometry object, this operator must behave
@@ -618,8 +618,8 @@ module RGeo
       # is not specified; an implementation may choose to provide
       # additional capabilities as appropriate.
 
-      def +(rhs_)
-        union(rhs_)
+      def +(rhs)
+        union(rhs)
       end
 
       # If the given rhs is a geometry object, this operator must behave
@@ -627,8 +627,8 @@ module RGeo
       # types is not specified; an implementation may choose to provide
       # additional capabilities as appropriate.
 
-      def *(rhs_)
-        intersection(rhs_)
+      def *(rhs)
+        intersection(rhs)
       end
     end
   end
